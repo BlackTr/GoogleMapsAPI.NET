@@ -19,7 +19,7 @@ namespace GoogleMapsAPI.NET.API.Common.Responses
         {
 
             // Save with default encoding
-            SaveContent(path, Encoding.Default);
+			SaveContent(path, Encoding.UTF8);
 
         }
 

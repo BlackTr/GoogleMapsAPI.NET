@@ -35,7 +35,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Text;
-using System.Web;
 
 namespace GoogleMapsAPI.NET.Requests.Helpers
 {

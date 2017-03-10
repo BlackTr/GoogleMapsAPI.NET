@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Linq;
 
 namespace GoogleMapsAPI.NET.Extensions
@@ -22,7 +23,7 @@ namespace GoogleMapsAPI.NET.Extensions
         {
             parent = ResolveGenericTypeDefinition(parent);
 
-            var currentChild = child.IsGenericType
+			var currentChild = child.GetTypeInfo().IsGenericType
                                    ? child.GetGenericTypeDefinition()
                                    : child;
 
@@ -31,10 +32,10 @@ namespace GoogleMapsAPI.NET.Extensions
                 if (parent == currentChild || HasAnyInterfaces(parent, currentChild))
                     return true;
 
-                currentChild = currentChild.BaseType != null
-                               && currentChild.BaseType.IsGenericType
-                                   ? currentChild.BaseType.GetGenericTypeDefinition()
-                                   : currentChild.BaseType;
+				currentChild = currentChild.GetTypeInfo().BaseType != null
+							   && currentChild.GetTypeInfo().BaseType.GetTypeInfo().IsGenericType
+								   ? currentChild.GetTypeInfo().BaseType.GetGenericTypeDefinition()
+								   : currentChild.GetTypeInfo().BaseType;
 
                 if (currentChild == null)
                     return false;
@@ -54,10 +55,10 @@ namespace GoogleMapsAPI.NET.Extensions
         /// <returns>True/False based on result</returns>
         private static bool HasAnyInterfaces(Type parent, Type child)
         {
-            return child.GetInterfaces()
+			return child.GetInterfaces()
                 .Any(childInterface =>
                 {
-                    var currentInterface = childInterface.IsGenericType
+					var currentInterface = childInterface.GetTypeInfo().IsGenericType
                         ? childInterface.GetGenericTypeDefinition()
                         : childInterface;
 
@@ -73,8 +74,8 @@ namespace GoogleMapsAPI.NET.Extensions
         private static Type ResolveGenericTypeDefinition(Type parent)
         {
 
-            var shouldUseGenericType = !(parent.IsGenericType && parent.GetGenericTypeDefinition() != parent);
-            if (parent.IsGenericType && shouldUseGenericType)
+			var shouldUseGenericType = !(parent.GetTypeInfo().IsGenericType && parent.GetGenericTypeDefinition() != parent);
+			if (parent.GetTypeInfo().IsGenericType && shouldUseGenericType)
                 parent = parent.GetGenericTypeDefinition();
             return parent;
 

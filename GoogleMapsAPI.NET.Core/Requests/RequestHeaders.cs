@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 
 namespace GoogleMapsAPI.NET.Requests
 {
@@ -418,7 +419,7 @@ namespace GoogleMapsAPI.NET.Requests
 
         private static bool IsGenericEnumerable(Type T)
         {
-            return !(T == typeof(string)) && T.IsGenericType && T.GetGenericTypeDefinition() == typeof(IEnumerable<>);
+			return !(T == typeof(string)) && T.GetTypeInfo().IsGenericType && T.GetGenericTypeDefinition() == typeof(IEnumerable<>);
         }
 
         private static DateTime? ParseDateTime(string value)
